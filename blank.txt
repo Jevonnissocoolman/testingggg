@@ -1,0 +1,54 @@
+Oops! The game crashed:
+Thread error (Thread: 0x600001969cb0)
+
+string:52: attempt to index global 'G' (a nil value)
+stack traceback:
+string:52: in main chunk
+
+Additional Context:
+Balatro Version: 1.0.1f-FULL
+Modded Version: 1.0.0-ALPHA-0718a-STEAMODDED
+Love2D Version: 11.5.0
+Lovely Version: 0.5.0-beta5
+Steamodded Mods:
+    1: Cryptid by MathIsFun_, Balatro Discord [ID: Cryptid, Version: 0.4.3]
+    2: Talisman by MathIsFun_, Mathguy24 [ID: Talisman, Version: 2.0.0-beta1]
+
+Stack Traceback
+===============
+(3) upvalue C function 'error'
+(4) Love2D function at file 'callbacks.lua:181' (best guess)
+Local variables:
+ t = Thread: 0x600001969cb0
+ err = string: "string:52: attempt to index global 'G' (a nil value)\
+stack traceback:\
+\9string:52: in main chunk"
+(5) Lua function '?' at file 'main.lua:69' (best guess)
+Local variables:
+ _n = nil
+ _a = nil
+ _b = nil
+ _c = nil
+ _d = nil
+ _e = nil
+ _f = nil
+ touched = nil
+ (for generator) = C function: 0x0104d57490
+ (for state) = nil
+ (for control) = string: "threaderror"
+ name = string: "threaderror"
+ a = Thread: 0x600001969cb0
+ b = string: "string:52: attempt to index global 'G' (a nil value)\
+stack traceback:\
+\9string:52: in main chunk"
+ c = nil
+ d = nil
+ e = nil
+ f = nil
+(6) global C function 'xpcall'
+(7) Love2D function at file 'boot.lua:377' (best guess)
+Local variables:
+ func = Lua function '?' (defined at line 52 of chunk main.lua)
+ inerror = boolean: true
+ deferErrhand = Lua function '(Love2D Function)' (defined at line 348 of chunk [love "boot.lua"])
+ earlyinit = Lua function '(Love2D Function)' (defined at line 355 of chunk [love "boot.lua"])
