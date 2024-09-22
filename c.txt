@@ -1,76 +1,39 @@
-Oops! The game crashed:
-Mods/Cryptid-main/Items/zExotic.lua:533: attempt to index a nil value
-
-Additional Context:
-Balatro Version: 1.0.1f-FULL
-Modded Version: 1.0.0-ALPHA-0712a-STEAMODDED
-Love2D Version: 11.5.0
-Lovely Version: 0.5.0-beta5
-Steamodded Mods:
-    1: Cryptid by MathIsFun_, Balatro Discord [ID: Cryptid, Version: 0.4.2]
-    2: Talisman by MathIsFun_ [ID: Talisman, Version: 1.2.2]
-
-Stack Traceback
-===============
-(3) Lua field 'func' at line 533 of chunk '"Mods/Cryptid-main/Items/zExotic.lua"]'
-Local variables:
- col = table: 0x0114081540  {1:0.29411764705882, 2:0.76078431372549, 3:0.57254901960784, 4:1}
- (*temporary) = nil
- (*temporary) = number: 2.51816e-314
- (*temporary) = nil
- (*temporary) = string: "HUD_blind_debuff_1"
- (*temporary) = table: 0x017f9cb9a8  {pinch:table: 0x017f9e7b00, VT:table: 0x017f9e7608, last_aligned:-1, static_rotation:true (more...)}
- (*temporary) = nil
- (*temporary) = table: 0x017f9cb9f0  {1:table: 0x017f9cbbc8, 2:table: 0x017f9cc228}
- (*temporary) = userdata: NULL
- (*temporary) = number: 2
- (*temporary) = string: "attempt to index a nil value"
-(4) Lua method 'handle' at file 'engine/event.lua:93'
-Local variables:
- self = table: 0x017f9f2570  {timer:TOTAL, delay:0.8, created_on_pause:false, start_timer:true, blocking:true (more...)}
- _results = table: 0x011fe96a20  {completed:false, pause_skip:false, time_done:false, blocking:true}
-(5) Lua method 'update' at file 'engine/event.lua:182'
-Local variables:
- self = table: 0x011ce40608  {queues:table: 0x011ce40650, queue_last_processed:15.866666666667, queue_dt:0.016666666666667 (more...)}
- dt = number: 0.0166768
- forced = nil
- (for generator) = C function: next
- (for state) = table: 0x011ce40650  {base:table: 0x011ce407a8, other:table: 0x011ce40880, tutorial:table: 0x011ce407f0 (more...)}
- (for control) = userdata: NULL
- k = string: "base"
- v = table: 0x011ce407a8  {1:table: 0x012c59bfe8, 2:table: 0x017f9f2570, 3:table: 0x017f9f40c0, 4:table: 0x017f9f4640 (more...)}
- blocked = boolean: false
- i = number: 2
- results = table: 0x011fe96a20  {completed:false, pause_skip:false, time_done:false, blocking:true}
-(6) Lua upvalue 'upd' at file 'game.lua:2544'
-Local variables:
- self = table: 0x011408d650  {ROOM_ORIG:table: 0x0114235678, HUD:table: 0x017faee620, STATE_COMPLETE:true (more...)}
- dt = number: 0.0166768
- http_resp = nil
-(7) Lua upvalue 'gameUpdateRef' at file 'main.lua:707'
-Local variables:
- self = table: 0x011408d650  {ROOM_ORIG:table: 0x0114235678, HUD:table: 0x017faee620, STATE_COMPLETE:true (more...)}
- dt = number: 0.0166768
-(8) Lua upvalue 'upd' at file 'main.lua:903'
-Local variables:
- self = table: 0x011408d650  {ROOM_ORIG:table: 0x0114235678, HUD:table: 0x017faee620, STATE_COMPLETE:true (more...)}
- dt = number: 0.0166768
-(9) Lua upvalue 'upd' at line 1031 of chunk '"Mods/Cryptid-main/Items/Blinds.lua"]'
-Local variables:
- self = table: 0x011408d650  {ROOM_ORIG:table: 0x0114235678, HUD:table: 0x017faee620, STATE_COMPLETE:true (more...)}
- dt = number: 0.0166768
-(10) Lua method 'update' at line 1918 of chunk '"Mods/Cryptid-main/Items/MiscJokers.lua"]'
-Local variables:
- self = table: 0x011408d650  {ROOM_ORIG:table: 0x0114235678, HUD:table: 0x017faee620, STATE_COMPLETE:true (more...)}
- dt = number: 0.0166768
-(11) Lua field 'update' at file 'main.lua:133'
-Local variables:
- dt = number: 0.0166768
-(12) Lua function '?' at file 'main.lua:77' (best guess)
-(13) global C function 'xpcall'
-(14) Love2D function at file 'boot.lua:377' (best guess)
-Local variables:
- func = Lua function '?' (defined at line 48 of chunk main.lua)
- inerror = boolean: true
- deferErrhand = Lua function '(Love2D Function)' (defined at line 348 of chunk [love "boot.lua"])
- earlyinit = Lua function '(Love2D Function)' (defined at line 355 of chunk [love "boot.lua"])
+if
+			context.using_consumeable
+			and context.consumeable.ability.set == "Code"
+			and not context.consumeable.beginning_end
+		then
+			if #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
+				if pseudorandom("cry_copypaste_joker") < G.GAME.probabilities.normal / card.ability.extra.odds then
+					if
+						G.GAME.probabilities.normal >= card.ability.extra.odds and context.consumeable.from_copypaste
+					then
+						card.ability.extra.ckt = card.ability.extra.ckt + 1
+					else
+						card.ability.extra.ckt = 0
+					end
+					G.E_MANAGER:add_event(Event({
+						func = function()
+							local cards = copy_card(context.consumeable)
+							if card.ability.extra.ckt >= 10 then
+								cards.beginning_end = true
+								card.ability.extra.ckt = 0
+							else
+								cards.from_from_copypaste = true
+							end
+							cards:add_to_deck()
+							G.consumeables:emplace(cards)
+							return true
+						end,
+					}))
+					card_eval_status_text(
+						context.blueprint_cards or card,
+						"extra",
+						nil,
+						nil,
+						nil,
+						{ message = localize("k_copied_ex") }
+					)
+				end
+			end
+		end
